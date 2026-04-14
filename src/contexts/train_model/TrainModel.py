@@ -40,7 +40,7 @@ class TrainModel:
             ) as connection:
                 with connection.cursor() as cursor:
                     # Consulta SQL
-                    cursor.execute('SELECT x, y FROM "Dataset";')
+                    cursor.execute('SELECT * FROM "train_model";')
                     rows = cursor.fetchall()  # devuelve una lista de tuplas [(x1,y1),(x2,y2),...]
                     
                     print(f"Filas recuperadas: {len(rows)}")
