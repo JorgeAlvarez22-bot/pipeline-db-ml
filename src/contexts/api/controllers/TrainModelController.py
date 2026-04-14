@@ -10,21 +10,23 @@ from src.contexts.api.models import PredictorRequest
 class TrainModelController:
     def execute(self, request: PredictorRequest):
         print(request)
-        sex=request.sex.value
-        nuevo=request.nuevo
-       
-        lr_model_path = os.getenv("MODELO_ENTRENADO")
+        email=request.email
+        country = request.country
+        city= request.city
        
         # Cargar el modelo desde el archivo
-        modelo_cargado = joblib.load(lr_model_path)
+        modelo_cargado = joblib.load(os.getenv("MODELO_ENTRENADO"))
+        encoder= joblib.load(os.getenv("ENCODER_ENTRENADO"))
+        label_encoder = joblib.load(os.getenv("LABEL_ENCODER_ENTRENADO"))
 
-        # Crear un nuevo dato para predecir
-        nuevo_dato = np.array([[nuevo]])  # X = 6
 
-        # Hacer la predicción
+        # Creando y codificando el dato
+        nuevo_dato = encoder.transform(np.array([[email, country, city]]))
+
+        # Mandando el dato para hacer la predicción
         result = modelo_cargado.predict(nuevo_dato)
-        print(f"Predicción para X=6: {result[0][0]}")
+        prediction= label_encoder.inverse_transform(result)
+        print(f"Predicción: {prediction[0]}")
         
-        return {"status": "OK", "result": result[0][0]}
-
-    
+        return {"status": "OK", "result": prediction[0]}
+        

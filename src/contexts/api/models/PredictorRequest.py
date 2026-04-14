@@ -1,30 +1,37 @@
-from enum import Enum
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
+from typing import Literal
 
+EmailProvider = Literal[
+    "yahoo", "sapo", "comcast", "jetbrains", "woodstock",
+    "surfeu", "jubii", "embraer", "google", "riotur",
+    "hotmail", "gmail", "aol", "rediff", "wp",
+    "rogers", "shaw", "microsoft", "yachoo", "apple", "uol",
+]
 
-class SexEnum(str, Enum):
-    M = "M"
-    F = "F"
+CountryProvider = Literal[
+    "Argentina", "Spain", "Italy", "Hungary", "India", "Czech Republic",
+    "Belgium", "Sweden", "Chile", "Norway", "France", "USA", "United Kingdom",
+    "Netherlands", "Brazil", "Austria", "Poland", "Australia", "Ireland",
+    "Germany", "Denmark", "Canada", "Finland", "Portugal"
+]
+
+CityProvider = Literal[
+    "Porto", "Budapest", "Reno", "London", "Paris", "New York",
+    "Salt Lake City", "Prague", "Dijon", "Rome", "Berlin", "Lyon",
+    "Bangalore", "Ottawa", "Orlando", "Fort Worth", "Chicago", "Mountain View",
+    "Stuttgart", "Delhi", "Stockholm", "Vienne", "Edinburgh",
+    "Halifax", "São Paulo", "Madison", "Amsterdam", "Montréal",
+    "Sidney", "Madrid", "Lisbon", "Warsaw", "Edmonton", "Vancouver",
+    "Dublin", "Toronto", "Santiago", "Brasília", "Bordeaux",
+    "Cupertino", "Brussels", "Redmond", "Buenos Aires",
+    "São José dos Campos", "Yellowknife", "Boston", "Tucson",
+    "Helsinki", "Winnipeg", "Copenhagen", "Oslo", "Frankfurt",
+    "Rio de Janeiro"
+]
+    
 
 
 class PredictorRequest(BaseModel):
-    sex: SexEnum
-    nuevo: int
-
-    @validator("sex")
-    def validate_sex(cls, sex):
-        sex_ranges = [SexEnum.F, SexEnum.M]
-        if sex not in sex_ranges:
-            raise ValueError("Invalid sex range")
-        return sex
-    
-    @validator("nuevo")
-    def validate_nuevo(cls, nuevo):
-        try:
-            int(nuevo)
-        except ValueError:
-            raise ValueError("nuevo must be an integer")
-        return nuevo
-    
-
-
+  email: EmailProvider
+  country: CountryProvider
+  city: CityProvider
